@@ -1,1 +1,1 @@
-DATABASE_URL=mysql+pymysql://root:password@localhost:####/suburbia
+DATABASE_URL=mysql+pymysql://usuario:password@localhost:####/suburbia
