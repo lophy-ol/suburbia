@@ -10,8 +10,8 @@
 🛠️ INSTALACIÓN PASO A PASO
 
 1. Clonar el repositorio:
-git clone https://github.com/tu-usuario/padrino-crud.git
-cd padrino-crud
+git clone https://github.com/tu-usuario/suburbia.git
+cd suburbia-main
 
 2. Configurar entorno virtual:
 python -m venv 23270667
@@ -29,10 +29,10 @@ pip install -r requirements.txt
 cp .env.example .env
 
 2. Editar .env con tus credenciales:
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=tu_password
+DB_HOST=localhost  
+DB_PORT=3306  
+DB_USER=root  
+DB_PASSWORD=tu_password  
 DB_NAME=padrino_db
 
 3. IMPORTAR LA BASE DE DATOS suburbia.sql:
@@ -40,57 +40,37 @@ DB_NAME=padrino_db
   mysql -u root -p padrino_db < suburbia.sql
   
 - Método 2 (usando MySQL Workbench):
-  1. Abrir MySQL Workbench
-  2. Conectarse al servidor MySQL
-  3. Click en "Server" > "Data Import"
-  4. Seleccionar "Import from Self-Contained File"
-  5. Buscar y seleccionar el archivo suburbia.sql
-  6. Seleccionar el esquema padrino_db como destino
+  1. Abrir MySQL Workbench  
+  2. Conectarse al servidor MySQL  
+  3. Click en "Server" > "Data Import"  
+  4. Seleccionar "Import from Self-Contained File"  
+  5. Buscar y seleccionar el archivo suburbia.sql  
+  6. Seleccionar el esquema padrino_db como destino  
   7. Click en "Start Import"
 
-🖥️ INICIAR EL SISTEMA
-python app.py
+📌 EJEMPLO DE CONEXIÓN A BASE DE DATOS (mysql.connector)
 
-🧩 MÓDULOS PRINCIPALES
+El sistema utiliza `mysql.connector` para conectarse a la base de datos MySQL. A continuación, un ejemplo de conexión:
 
-Clientes      👥  Gestión de clientes
-Proveedores   📦  Administración de proveedores
-Productos     🛍️  Inventario de productos
-Empleados     👨‍💼 Registro de personal
-Ventas        💰  Procesos de ventas
-Sucursales    🏬  Administración de locales
-Reportes      📊  Generación de informes
+```python
+import mysql.connector
+from dotenv import load_dotenv
+import os
 
-📌 CARACTERÍSTICAS CLAVE
-- Interfaz moderna con Tkinter
-- Diseño responsive
-- Validación de datos integrada
-- Búsqueda avanzada
-- Exportación a PDF/Excel
-- Dashboard interactivo
+load_dotenv()  # Carga variables desde el archivo .env
 
-🐛 SOLUCIÓN DE PROBLEMAS COMUNES
-Error con tkcalendar:
-pip install --upgrade pip
-pip install tkcalendar
+conn = mysql.connector.connect(
+    host=os.getenv("DB_HOST"),
+    port=int(os.getenv("DB_PORT")),
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD"),
+    database=os.getenv("DB_NAME")
+)
 
-Error de conexión MySQL:
-1. Verificar que el servicio MySQL esté corriendo
-2. Revisar credenciales en .env
-3. Asegurar privilegios suficientes
-4. Confirmar que la base de datos suburbia.sql se importó correctamente
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM clientes")
+for row in cursor.fetchall():
+    print(row)
 
-📄 ESTRUCTURA DEL PROYECTO
-padrino-crud/
-├── app.py                # Punto de entrada
-├── init_db.py            # Inicialización de BD
-├── requirements.txt      # Dependencias
-├── .env.example          # Plantilla configuración
-├── suburbia.sql          # Base de datos completa
-├── controllers/          # Lógica de negocio
-├── models/               # Modelos de datos
-├── views/                # Interfaces
-│   ├── components/       # Componentes UI
-│   └── styles/           # Estilos CSS
-├── utils/                # Helpers
-└── docs/                 # Documentación
+cursor.close()
+conn.close()
